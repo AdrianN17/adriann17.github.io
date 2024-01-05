@@ -13,7 +13,6 @@ timezone: America/Lima
 
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
-avatar: https://avatars.githubusercontent.com/u/36133718?v=4
 
 title: AdrianN17´s blog # the main title
 
@@ -71,10 +70,10 @@ theme_mode: # [light|dark]
 # will be added to all image (site avatar & posts' images) paths starting with '/'
 #
 # e.g. 'https://cdn.com'
-img_cdn:
+img_cdn: https://avatars.githubusercontent.com/u/36133718?v=4&size=40
 
 # the avatar on sidebar, support local or CORS resources
-avatar:
+avatar: https://avatars.githubusercontent.com/u/36133718?v=4
 
 # boolean type, the global switch for TOC in posts.
 toc: true
