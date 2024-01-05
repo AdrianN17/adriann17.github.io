@@ -16,10 +16,10 @@ timezone: America/Lima
 
 title: AdrianN17´s blog # the main title
 
-tagline: A cybersecurity blog about my malware analysis/reversings writeups # it will display as the sub-title
+tagline: A cybersecurity blog about my malware analysis/reversing writeups # it will display as the sub-title
 
 description: >- # used by seo meta and the atom feed
-  A cybersecurity blog about my malware analysis/reversings writeups
+  A cybersecurity blog about my malware analysis/reversing writeups
 
 # Fill in the protocol & hostname for your site.
 # e.g. 'https://username.github.io', note that it does not end with a '/'.
