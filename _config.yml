@@ -16,7 +16,7 @@ timezone: America/Lima
 
 title: AdrianN17´s blog # the main title
 
-tagline: A text-focused Jekyll theme # it will display as the sub-title
+tagline: A cybersecurity blog about my malware analysis/reversings writeups # it will display as the sub-title
 
 description: >- # used by seo meta and the atom feed
   A cybersecurity blog about my malware analysis/reversings writeups
