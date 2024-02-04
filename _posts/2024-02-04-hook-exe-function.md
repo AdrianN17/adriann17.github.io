@@ -1,13 +1,11 @@
 ---
 layout: post
-title: "How to hook a exe function"
+title: "How to hook a exe function address"
 img_path: /assets/img/posts/how-to-hook-a-exe-function-address/
 
 categories: [Reversing, Windows]
 tags: [Hooking]
 ---
-
-# How to hook a exe function address
 
 Hello everyone, this it's my first post about reverse engineering.
 
