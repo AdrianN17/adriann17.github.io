@@ -27,15 +27,15 @@ Also, I'm sharing the source code if you want to try yourself.
 
 Source code exe target:
 
-{% raw %}
 <code data-gist-id="589536c7d16cec7f33c0735c4752c595" data-gist-line="X-X" data-gist-hide-footer="true"></code>
-{% endraw %}
 
 Source code dll to inject:
-https://gist.github.com/AdrianN17/7f5ea07477b4ca0cffac21749467ce4f
+
+<code data-gist-id="589536c7d16cec7f33c0735c4752c595" data-gist-line="X-X" data-gist-hide-footer="true"></code>
 
 Source code injector
-https://gist.github.com/AdrianN17/941dce4fc9b73305e822485cbbc54a19
+
+<code data-gist-id="941dce4fc9b73305e822485cbbc54a19" data-gist-line="X-X" data-gist-hide-footer="true"></code>
 
 First of all I need to clarify about my local exe names with a equivalent table:
 
