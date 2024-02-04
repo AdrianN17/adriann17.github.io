@@ -19,7 +19,7 @@ Today, I make a easy and understandable tutorial about how to hook a specific fu
 In this example I'm using some Reversing tools, such as:
 - Ghidra
 - x64dbg
-- visual studio (compiler)
+- Visual Studio 2022
 
 Also, I'm sharing the source code if you want to try yourself.
 
