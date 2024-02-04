@@ -4,6 +4,11 @@ title: "How to hook a exe function"
 img_path: /assets/img/posts/how-to-hook-a-exe-function-address/
 ---
 
+<script
+  type="text/javascript"
+  src="https://cdn.jsdelivr.net/npm/gist-embed@1.0.4/dist/gist-embed.min.js"
+></script>
+
 # How to hook a exe function address
 
 Hello everyone, this it's my first post about reverse engineering.
@@ -21,7 +26,10 @@ In this example I'm using some Reversing tools, such as:
 Also, I'm sharing the source code if you want to try yourself.
 
 Source code exe target:
-https://gist.github.com/AdrianN17/589536c7d16cec7f33c0735c4752c595
+
+{% raw %}
+<code data-gist-id="589536c7d16cec7f33c0735c4752c595" data-gist-line="X-X" data-gist-hide-footer="true"></code>
+{% endraw %}
 
 Source code dll to inject:
 https://gist.github.com/AdrianN17/7f5ea07477b4ca0cffac21749467ce4f
