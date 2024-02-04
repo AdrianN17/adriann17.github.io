@@ -4,6 +4,16 @@ title: "How to hook a exe function"
 img_path: /assets/img/posts/how-to-hook-a-exe-function-address/
 ---
 
+<head>
+  <!-- Other head elements -->
+
+  <!-- Load highlight.js library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
+
+  <!-- Load Monokai theme for highlight.js -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/monokai-sublime.min.css">
+</head>
+
 # How to hook a exe function address
 
 Hello everyone, this it's my first post about reverse engineering.
@@ -22,7 +32,9 @@ Also, I'm sharing the source code if you want to try yourself.
 
 Source code exe target:
 
-{% gist 589536c7d16cec7f33c0735c4752c595 %}
+<div class="highlight">
+  {% gist 589536c7d16cec7f33c0735c4752c595 %}
+</div>
 
 Source code dll to inject:
 
@@ -141,3 +153,11 @@ And that all, testing in your testexe running proccess you will receive differen
 * Make a hook it's very easy, the bad part is search the address of the function that you want to change it's behaviour.
 * In this example I take some facilities, such as using **declspec(noinline)** and printing the function address. The noinline directive it's the most important, because without that, our work will be more difficult.  According to chatgpt description is a Microsoft-specific attribute used to instruct the compiler not to perform function inlining optimization. For that reason our function was separate of main function.
 * It's possible to use others debuggers like windbg or Ghidra dbg.
+
+<script>
+  document.addEventListener('DOMContentLoaded', (event) => {
+    document.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightBlock(block);
+    });
+  });
+</script>
