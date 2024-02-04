@@ -11,7 +11,7 @@ tags: [Hooking]
 
 Hello everyone, this it's my first post about reverse engineering.
 
-Today, I make a easy and understanding tutorial about how to hook a specific function of a executable, using its address to change the result of a string. Don't worry if you are a newbie (me too), I'm going to explain all the steps to make your first hook.
+Today, I make a easy and understable tutorial about how to hook a specific function of a executable, using its address to change the result of a string. Don't worry if you are a newbie (me too), I'm going to explain all the steps to make your first hook.
 
 ![Alt text](Pasted image 20240204003959.png)
 ## Configuring your local laboratory
