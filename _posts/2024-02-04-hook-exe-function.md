@@ -11,7 +11,7 @@ tags: [Hooking]
 
 Hello everyone, this it's my first post about reverse engineering.
 
-Today, I make a easy and understandable tutorial about how to hook a specific function of a executable, using its address to change the result of a string. For than purpose I made an easy executable with those functionalities.
+Today, I make an easy and understandable tutorial about how to hook a specific function of a executable, using its address to change the result of a string. For than purpose I made an easy executable with those functionalities.
 
 Don't worry if you are a newbie (me too), I'm going to explain all the steps to make your first hook.
 
@@ -23,7 +23,7 @@ In this example I'm using some Reversing tools, such as:
 - x64dbg
 - Visual Studio 2022
 
-Also, I'm sharing the source code if you want to try yourself.
+Also, I'm sharing the source code if you want to try it yourself.
 
 Source code exe target:
 
@@ -270,21 +270,21 @@ With that, we can avoid some mistakes with the pictures, sorry about that.
 Let's start compiling only injector.cpp and textexe.cpp, the evildll.cpp file need an additional step to work.
 ![Alt text](Pasted image 20240204005950.png)
 
-Note: I recommend use x64 architecture and release in the compiler option.
+Note: I recommend using x64 architecture and release in the compiler option.
 
-First of all we need to pointing out in get the function's address to make a hook. For that step Ghidra can help us to disassemble textexe.exe and find greeting address.
+First of all we need to to point out the function's address to make a hook. For that step Ghidra can help us to disassemble textexe.exe and find greeting address.
 
 ![Alt text](Pasted image 20240203234558.png)
 
-After you open exe in Ghidra, you can see a lot of strange assembly code, and a good question it's, how to start our finding?
+After you open exe in Ghidra, you can see a lot of strange assembler code, and a good question it's, how to start our finding?
 
 ![Alt Text](https://i.kym-cdn.com/photos/images/original/001/142/233/897.gif)
 
-Don't panic. One tip it's execute our exe and find some useful string in output.
+Don't panic. One tip it's execute our exe and find some useful string in the output.
 
 ![Alt text](Pasted image 20240203234533.png)
 
-The string **Hello world** it's our start point.
+The string **Hello world** it's our starting point.
 
 ![Alt text](Pasted image 20240203232940.png)
 
@@ -292,10 +292,10 @@ We can use the **Find String** functionality to get the location of this string.
 
 ![Alt text](Pasted image 20240203233021.png)
 
-And clicking the string we can find our function. Also we can check if is the correct function using the decompiler. It's very similar of the greeting function in source code.
+And clicking the string we can find our function using the decompiler option, that look very similar of the greeting function in the source code.
 
 An important information is the function address value: 140001000
-It's because is a 64 bytes architecture.
+It's because it's a 64 bytes architecture.
 
 ![Alt text](https://www.icegif.com/wp-content/uploads/pikachu-crying-icegif.gif)
 
@@ -305,7 +305,7 @@ With x64dbg it's possible to get the address in runtime to our hook.
 
 ![Alt text](Pasted image 20240203231044.png)
 
-Opening testexe.exe and running in **Run to user code** , we can see a lof of assembly code, similar to Ghidra.
+Opening testexe.exe and running in **Run to user code** , we can see a lof of assembler code, similar to Ghidra.
 
 ![Alt text](Pasted image 20240203231120.png)
 
@@ -313,20 +313,20 @@ Similar to Ghidra, we can start finding the **Hello world** string.
 
 ![Alt text](Pasted image 20240203231856.png)
 
-And if we take a look at the code, it's very similar of ghidra assemby.
+And if we take a look at the code, it's very similar of ghidra assembler code.
 
 The address it's:  00007FF621251000
 In hex format: 0x00007FF621251000
 
 ![Alt text](Pasted image 20240203231812.png)
 
-Another way to get the address or validate it's using **Symbols** option and find the **greeting function**.
+Another way to get the address or validate it's using the **Symbols** option and find the **greeting function**.
 
 ![Alt text](Pasted image 20240203230111.png)
 
 If you already execute the testexe with an incorrect key, you can receive the function.
 I know, it's a cheat, but with that we can validate the address.
-The main topic it's know the process of get the address and the useful tools for that purpose.
+The main topic is the process of getting the address and the useful tools for that purpose.
 
 Having the function address, now it's the time to compile our evildll.cpp file.
 
@@ -344,11 +344,11 @@ Now, run the injector with the values.
 injector.exe testexe.exe evildll.dll
 ```
 
-And if you don't receive error or a different output, that means your dll was injected and the hook it's running.
+And if you don't receive an error or a different output, that means your dll was injected and the hook it's running.
 
 ![Alt text](Pasted image 20240203230234.png)
 
-Note: If you want to know the name of the  testexe.exe process, you can check the **task administrator**.
+Note: If you want to know the name of the testexe.exe process, you can check the **task administrator**.
 
 ![Alt text](Pasted image 20240203230325.png)
 
@@ -360,6 +360,6 @@ And that all, testing in your testexe running process you will receive different
 
 ## Conclusions
 
-* Make a hook it's very easy, the bad part is search the address of the function that you want to change it's behaviour.
+* Make a hook it's very easy, the bad part is searching the address of the function that you want to change it's behaviour.
 * In this example I take some facilities, such as using **declspec(noinline)** and printing the function address. The noinline directive it's the most important, because without that, our work will be more difficult.  According to chatgpt description is a Microsoft-specific attribute used to instruct the compiler not to perform function inlining optimization. For that reason our function was separate of main function.
-* It's possible to use others debuggers like windbg or Ghidra dbg.
+* It's possible to use other debuggers like Windbg or Ghidra dbg.
