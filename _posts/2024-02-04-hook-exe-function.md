@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "How to hook a exe function"
-img_path: https://github.com/AdrianN17/adriann17.github.io/tree/main//assets/img/posts/how-to-hook-a-exe-function-address/
+img_path: assets/img/posts/how-to-hook-a-exe-function-address/
 ---
 
 # How to hook a exe function address
