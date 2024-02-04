@@ -4,16 +4,6 @@ title: "How to hook a exe function"
 img_path: /assets/img/posts/how-to-hook-a-exe-function-address/
 ---
 
-<head>
-  <!-- Other head elements -->
-
-  <!-- Load highlight.js library -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
-
-  <!-- Load Monokai theme for highlight.js -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/monokai-sublime.min.css">
-</head>
-
 # How to hook a exe function address
 
 Hello everyone, this it's my first post about reverse engineering.
@@ -32,18 +22,233 @@ Also, I'm sharing the source code if you want to try yourself.
 
 Source code exe target:
 
-<div class="highlight">
-  {% gist 589536c7d16cec7f33c0735c4752c595 %}
-</div>
+```c++
+//testexe.cpp
+#include <iostream>
+#include <conio.h>
+
+__declspec(noinline) void greeting()
+{
+    std::cout << "Hello world" << std::endl;
+}
+
+int main() {
+    char key;
+
+    while (true) {
+        //std::cout << "Press 'h' to print Hello, world. Press 'q' to exit." << std::endl;
+
+        // Wait until a key is pressed
+        key = _getch();
+
+        // Check the pressed key
+        if (key == 'h' || key == 'H') {
+            greeting();
+        }
+        else if (key == 'q' || key == 'Q') {
+            std::cout << "Exiting the program." << std::endl;
+            break;
+        }
+        else {
+            std::cout << "Unrecognized key." << std::endl;
+            auto address_greeting = reinterpret_cast<void*>(&greeting);
+
+            // Print the address of the greeting function
+            std::cout << "Address of the greeting function: " << address_greeting << std::endl;
+        }
+    }
+
+    return 0;
+}
+```
 
 Source code dll to inject:
 
-{% gist 7f5ea07477b4ca0cffac21749467ce4f %}
+```c++
+//evildll.cpp
+#include "pch.h"
+#include <Windows.h>
+#include <iostream>
+#include <detours.h>
 
+// Definition of the pointer to the original function
+typedef void (*GreetingFunc)();
+
+// Pointer to the original function
+GreetingFunc greetingOriginal = nullptr;
+
+// New implementation of the function (hook)
+void greetingHook()
+{
+    MessageBoxW(NULL, L"Hello, World!", L"Hello World App", MB_ICONINFORMATION);
+    std::cout << "Hooked: Hello from the DLL" << std::endl;
+}
+
+BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
+{
+    switch (ul_reason_for_call)
+    {
+    case DLL_PROCESS_ATTACH:
+    {
+        uintptr_t functionAddress = 0x00007FF621251000; // Replace with the actual address of the original function
+
+        greetingOriginal = reinterpret_cast<GreetingFunc>(functionAddress);
+
+        // Check if obtaining the address was successful
+        if (greetingOriginal == nullptr)
+        {
+            // Handle the error, for example, display a message or log to a file
+            MessageBox(NULL, L"Failed to obtain the address of the original function.", L"Error", MB_OK | MB_ICONERROR);
+            return FALSE;
+        }
+
+        // Start hooking when the DLL is loaded
+        DetourTransactionBegin();
+        DetourUpdateThread(GetCurrentThread());
+        DetourAttach(reinterpret_cast<PVOID*>(&greetingOriginal), greetingHook);
+        DetourTransactionCommit();
+        break;
+    }
+    case DLL_PROCESS_DETACH:
+    {
+        // Restore hooking when the DLL is unloaded
+        DetourTransactionBegin();
+        DetourUpdateThread(GetCurrentThread());
+        DetourDetach(reinterpret_cast<PVOID*>(&greetingOriginal), greetingHook);
+        DetourTransactionCommit();
+        break;
+    }
+    }
+    return TRUE;
+}
+```
 
 Source code injector
 
-{% gist 941dce4fc9b73305e822485cbbc54a19 %}
+```c++
+//injector.cpp
+#include <iostream>
+#include <locale>
+#include <codecvt>
+#include <windows.h>   
+#include <tlhelp32.h>
+
+int getPIDbyProcName(const WCHAR* procName) {
+    int pid = 0;
+    HANDLE hSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    PROCESSENTRY32 pe32;
+    pe32.dwSize = sizeof(PROCESSENTRY32);
+    if (Process32First(hSnap, &pe32) != FALSE) {
+        while (pid == 0 && Process32Next(hSnap, &pe32) != FALSE) {
+            if (_wcsicmp(pe32.szExeFile, procName) == 0) {
+                pid = pe32.th32ProcessID;
+            }
+        }
+    }
+    CloseHandle(hSnap);
+    return pid;
+}
+
+typedef LPVOID memory_buffer;
+
+bool fileExists(const std::wstring& filePath) {
+    DWORD fileAttributes = GetFileAttributes(filePath.c_str());
+    return (fileAttributes != INVALID_FILE_ATTRIBUTES && !(fileAttributes & FILE_ATTRIBUTE_DIRECTORY));
+}
+
+int wmain(int argc, wchar_t* argv[]) {
+    HANDLE pHandle; 
+    HANDLE remoteThread;
+    memory_buffer rb;
+
+    if (argc != 3) {
+        std::wcerr << L"Usage: " << argv[0] << L" <process name> <DLL path>" << std::endl;
+        return 1;
+    }
+
+    std::wstring procName = argv[1];
+    std::wstring evilDLL = argv[2];
+
+    if (!fileExists(evilDLL)) {
+        std::wcerr << L"Error: The specified DLL file path does not exist." << std::endl;
+        return 1;
+    }
+
+    unsigned int evilLen = static_cast<unsigned int>((evilDLL.length() + 1) * sizeof(wchar_t));
+
+    std::wcout << L"evilDLL: " << evilDLL << std::endl;
+    std::wcout << L"Size of evilDLL: " << evilLen << L" bytes" << std::endl;
+
+    // Get the PID of the process by name
+    int pid = getPIDbyProcName(procName.c_str());
+
+    // Open the process
+    pHandle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
+
+    if (pHandle == NULL) {
+        std::wcerr << L"Error opening the process. Error code: " << GetLastError() << std::endl;
+        return 1;
+    }
+
+    // Allocate memory in the remote process
+    rb = VirtualAllocEx(pHandle, NULL, evilLen, (MEM_RESERVE | MEM_COMMIT), PAGE_READWRITE);
+
+    if (rb == NULL) {
+        std::wcerr << L"Error allocating remote memory. Error code: " << GetLastError() << std::endl;
+        CloseHandle(pHandle);
+        return 1;
+    }
+
+    // Write the malicious code into the remote memory
+    if (!WriteProcessMemory(pHandle, rb, evilDLL.c_str(), evilLen, NULL)) {
+        std::wcerr << L"Error writing to remote memory. Error code: " << GetLastError() << std::endl;
+        VirtualFreeEx(pHandle, rb, 0, MEM_RELEASE);
+        CloseHandle(pHandle);
+        return 1;
+    }
+
+    // Get the address of LoadLibraryW
+    HMODULE hKernel32 = GetModuleHandle(L"Kernel32");
+
+    if (hKernel32 == NULL) {
+        std::wcerr << L"Error obtaining the handle of Kernel32. Error code: " << GetLastError() << std::endl;
+        VirtualFreeEx(pHandle, rb, 0, MEM_RELEASE);
+        CloseHandle(pHandle);
+        return 1;
+    }
+
+    void* lb = GetProcAddress(hKernel32, "LoadLibraryW");
+
+    if (lb == NULL) {
+        std::wcerr << L"Error obtaining the address of LoadLibraryW. Error code: " << GetLastError() << std::endl;
+        VirtualFreeEx(pHandle, rb, 0, MEM_RELEASE);
+        CloseHandle(pHandle);
+        return 1;
+    }
+
+    // Create a remote thread to execute LoadLibraryW with the name of the malicious DLL
+    remoteThread = CreateRemoteThread(pHandle, NULL, 0, (LPTHREAD_START_ROUTINE)lb, rb, 0, NULL);
+
+    if (remoteThread == NULL) {
+        std::wcerr << L"Error creating the remote thread. Error code: " << GetLastError() << std::endl;
+        VirtualFreeEx(pHandle, rb, 0, MEM_RELEASE);
+        CloseHandle(pHandle);
+        return 1;
+    }
+
+    std::wcout << L"DLL injected successfully into the process with PID: " << pid << std::endl;
+
+    // Wait for the remote thread to finish before exiting
+    WaitForSingleObject(remoteThread, INFINITE);
+
+    // Clean up resources
+    VirtualFreeEx(pHandle, rb, 0, MEM_RELEASE);
+    CloseHandle(pHandle);
+    CloseHandle(remoteThread);
+
+    return 0;
+}
+```
 
 First of all I need to clarify about my local exe names with a equivalent table:
 
@@ -153,11 +358,3 @@ And that all, testing in your testexe running proccess you will receive differen
 * Make a hook it's very easy, the bad part is search the address of the function that you want to change it's behaviour.
 * In this example I take some facilities, such as using **declspec(noinline)** and printing the function address. The noinline directive it's the most important, because without that, our work will be more difficult.  According to chatgpt description is a Microsoft-specific attribute used to instruct the compiler not to perform function inlining optimization. For that reason our function was separate of main function.
 * It's possible to use others debuggers like windbg or Ghidra dbg.
-
-<script>
-  document.addEventListener('DOMContentLoaded', (event) => {
-    document.querySelectorAll('pre code').forEach((block) => {
-      hljs.highlightBlock(block);
-    });
-  });
-</script>
