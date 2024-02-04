@@ -9,7 +9,7 @@ Hello everyone, this it's my first post about reverse engineering.
 
 Today, I make a easy and understanding tutorial about how to hook a specific function of a executable, using its address to change the result of a string. Don't worry if you are a newbie (me too), I'm going to explain all the steps to make your first hook.
 
-![Alt text](/assets/img/posts/how-to-hook-a-exe-function-address/Pasted image 20240204003959.png)
+![Alt text](</assets/img/posts/how-to-hook-a-exe-function-address/Pasted image 20240204003959.png>)
 ## Configuring your local laboratory
 
 In this example I'm using some Reversing tools, such as:
