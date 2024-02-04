@@ -42,13 +42,13 @@ With that, we can avoid some mistakes with the pictures, sorry about that.
 ## Searching address
 
 Let's start compiling only injector.cpp and textexe.cpp, the evildll.cpp file need an additional step to work.
-![Alt text](how-to-hook-a-exe-function-address/Pasted image 20240204005950.png)
+![Alt text](Pasted image 20240204005950.png)
 
 Note: I recommend configurate compiler option to x64 arquitecture and release.
 
 First of all we need to pointing out in get the function's address to make a hook. For that step Ghidra can help us to dissasemble textexe.exe and find greeting address.
 
-![Alt text](how-to-hook-a-exe-function-address/Pasted image 20240203234558.png)
+![Alt text](Pasted image 20240203234558.png)
 
 After you open exe in Ghidra, you can see a lot of strange assembly code, and a good question it's, how to start our finding?
 
@@ -56,15 +56,15 @@ After you open exe in Ghidra, you can see a lot of strange assembly code, and a 
 
 Don't panic. One tip it's execute our exe and find some usefull string in output.
 
-![Alt text](how-to-hook-a-exe-function-address/Pasted image 20240203234533.png)
+![Alt text](Pasted image 20240203234533.png)
 
 The string **Hello world** it's our start point.
 
-![Alt text](how-to-hook-a-exe-function-address/Pasted image 20240203232940.png)
+![Alt text](Pasted image 20240203232940.png)
 
 We can use the **Find String** functionality to get the location of this string.
 
-![Alt text](how-to-hook-a-exe-function-address/Pasted image 20240203233021.png)
+![Alt text](Pasted image 20240203233021.png)
 
 And clicking the string we can find our function. Also we can check if is the correct function using the decompiler. It's very similar of the greeting function in source code.
 
@@ -77,26 +77,26 @@ Despite this, we can't use this address, because it's not a runtime address, or 
 
 With x64dbg it's possible to get the address in runtime to our hook.
 
-![Alt text](how-to-hook-a-exe-function-address/Pasted image 20240203231044.png)
+![Alt text](Pasted image 20240203231044.png)
 
 Opening testexe.exe and running in **Run to user code** , we can see a lof of assembly code, similar to Ghidra.
 
-![Alt text](how-to-hook-a-exe-function-address/Pasted image 20240203231120.png)
+![Alt text](Pasted image 20240203231120.png)
 
 Similar to Ghidra, we can start finding the **Hello world** string. 
 
-![Alt text](how-to-hook-a-exe-function-address/Pasted image 20240203231856.png)
+![Alt text](Pasted image 20240203231856.png)
 
 And if we take a look at the code, it's very similar of ghidra assemby.
 
 The address it's:  00007FF621251000
 In hex format: 0x00007FF621251000
 
-![Alt text](how-to-hook-a-exe-function-address/Pasted image 20240203231812.png)
+![Alt text](Pasted image 20240203231812.png)
 
 Another way to get the address or validate it's using **Symbols** option and find the **greeting function**.
 
-![Alt text](how-to-hook-a-exe-function-address/Pasted image 20240203230111.png)
+![Alt text](Pasted image 20240203230111.png)
 
 If you already execute the testexe with an incorrect key, you can receive the function.
 I know, it's a cheat, but with that we can validate the address.
@@ -104,11 +104,11 @@ The main topic it's know the process of get the address and the usefull tools fo
 
 Having the function address, now it's the time to compile our evildll.cpp file.
 
-![Alt text](how-to-hook-a-exe-function-address/Pasted image 20240204002522.png)
+![Alt text](Pasted image 20240204002522.png)
 
 You need to update the address in the code
 
-![Alt text](how-to-hook-a-exe-function-address/Pasted image 20240203230307.png)
+![Alt text](Pasted image 20240203230307.png)
 
 ## Injecting DLL
 
@@ -120,13 +120,13 @@ injector.exe testexe.exe evildll.dll
 
 And if you don't receive error or a different output, that means your dll was injected and the hook it's running.
 
-![Alt text](how-to-hook-a-exe-function-address/Pasted image 20240203230234.png)
+![Alt text](Pasted image 20240203230234.png)
 
 Note: If you want to know the name of the  testexe.exe process, you can check the **task administrator**.
 
-![Alt text](how-to-hook-a-exe-function-address/Pasted image 20240203230325.png)
+![Alt text](Pasted image 20240203230325.png)
 
-![Alt text](how-to-hook-a-exe-function-address/Pasted image 20240203230340.png)
+![Alt text](Pasted image 20240203230340.png)
 
 And that all, testing in your testexe running proccess you will receive different values.
 
