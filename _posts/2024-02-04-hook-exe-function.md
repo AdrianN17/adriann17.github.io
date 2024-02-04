@@ -361,5 +361,5 @@ And that all, testing in your testexe running process you will receive different
 ## Conclusions
 
 * Make a hook it's very easy, the bad part is searching the address of the function that you want to change it's behaviour.
-* In this example I take some facilities, such as using **declspec(noinline)** and printing the function address. The noinline directive it's the most important, because without that, our work will be more difficult.  According to chatgpt description is a Microsoft-specific attribute used to instruct the compiler not to perform function inlining optimization. For that reason our function was separate of main function.
+* In this example I take some facilities, such as using **declspec(noinline)** and printing the function address. The noinline directive it's the most important, because without that, our work will be more difficult. According to chatgpt description is a Microsoft-specific attribute used to instruct the compiler not to perform function inlining optimization. For that reason our function was separate of main function.
 * It's possible to use other debuggers like Windbg or Ghidra dbg.
