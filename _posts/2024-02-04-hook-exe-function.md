@@ -270,9 +270,9 @@ With that, we can avoid some mistakes with the pictures, sorry about that.
 Let's start compiling only injector.cpp and textexe.cpp, the evildll.cpp file need an additional step to work.
 ![Alt text](Pasted image 20240204005950.png)
 
-Note: I recommend configurate compiler option to x64 arquitecture and release.
+Note: I recommend use x64 architecture and release in the compiler option.
 
-First of all we need to pointing out in get the function's address to make a hook. For that step Ghidra can help us to dissasemble textexe.exe and find greeting address.
+First of all we need to pointing out in get the function's address to make a hook. For that step Ghidra can help us to disassemble textexe.exe and find greeting address.
 
 ![Alt text](Pasted image 20240203234558.png)
 
@@ -280,7 +280,7 @@ After you open exe in Ghidra, you can see a lot of strange assembly code, and a 
 
 ![Alt Text](https://i.kym-cdn.com/photos/images/original/001/142/233/897.gif)
 
-Don't panic. One tip it's execute our exe and find some usefull string in output.
+Don't panic. One tip it's execute our exe and find some useful string in output.
 
 ![Alt text](Pasted image 20240203234533.png)
 
@@ -295,7 +295,7 @@ We can use the **Find String** functionality to get the location of this string.
 And clicking the string we can find our function. Also we can check if is the correct function using the decompiler. It's very similar of the greeting function in source code.
 
 An important information is the function address value: 140001000
-It's because is a 64 bytes arquitecture.
+It's because is a 64 bytes architecture.
 
 ![Alt text](https://www.icegif.com/wp-content/uploads/pikachu-crying-icegif.gif)
 
@@ -326,7 +326,7 @@ Another way to get the address or validate it's using **Symbols** option and fin
 
 If you already execute the testexe with an incorrect key, you can receive the function.
 I know, it's a cheat, but with that we can validate the address.
-The main topic it's know the process of get the address and the usefull tools for that purpose.
+The main topic it's know the process of get the address and the useful tools for that purpose.
 
 Having the function address, now it's the time to compile our evildll.cpp file.
 
@@ -354,7 +354,7 @@ Note: If you want to know the name of the  testexe.exe process, you can check th
 
 ![Alt text](Pasted image 20240203230340.png)
 
-And that all, testing in your testexe running proccess you will receive different values.
+And that all, testing in your testexe running process you will receive different values.
 
 ![Alt Text](https://i.makeagif.com/media/5-08-2014/4Zsl7h.gif)
 
