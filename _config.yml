@@ -70,7 +70,7 @@ theme_mode: dark # [light|dark]
 # will be added to all image (site avatar & posts' images) paths starting with '/'
 #
 # e.g. 'https://cdn.com'
-img_cdn: https://raw.githubusercontent.com/AdrianN17/adriann17.github.io/tree/main
+img_cdn: https://raw.githubusercontent.com/AdrianN17/adriann17.github.io/main
 
 # the avatar on sidebar, support local or CORS resources
 avatar: https://avatars.githubusercontent.com/u/36133718?s=96&v=4
