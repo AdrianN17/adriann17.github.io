@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "[Tutorial] How to hook a exe function address"
+title: "[Tutorial] How to hook a exe function"
 img_path: /assets/img/posts/how-to-hook-a-exe-function-address/
 
 categories: [Reversing, Windows]
